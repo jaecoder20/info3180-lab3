@@ -14,3 +14,9 @@ button {
   border-radius: 5px;
   color: white;
 }
+
+.flashes li {
+  color: rgba(30, 233, 30, 0.801);
+  list-style: none;
+  font-size: 1.5rem;
+}

@@ -1,6 +1,7 @@
 from app import app
 from flask import render_template, request, redirect, url_for, flash
-
+from app import mail
+from flask_mail import Message 
 from .forms import ContactForm
 ###
 # Routing for your application.
@@ -8,6 +9,23 @@ from .forms import ContactForm
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     myform = ContactForm()
+    if request.method == 'POST':
+        if myform.validate_on_submit():
+            # Note the difference when retrieving form data using Flask-WTF
+            # Here we use myform.firstname.data instead of request.form['firstname']
+            name = myform.name.data
+            subject = myform.subject.data
+            email = myform.email.data
+            message = myform.message.data
+
+            msg = Message(subject,
+            sender=(name, email),
+            recipients=["rojaewedderburn@gmail.com"])
+            msg.body = message
+            mail.send(msg)
+            flash('You have successfully sent your email', 'success')
+            return redirect(url_for('home'))
+        flash_errors(myform)
     return render_template('contact.html', form = myform)
 
 @app.route('/')
